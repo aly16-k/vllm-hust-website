@@ -224,10 +224,13 @@ def test_w4a8_tp1_runtime_evidence_is_this_cohorts_own():
     """
     renderer = load_renderer()
     points = tp1_points(frontier(), renderer)
+    # 前缀要收窄到本 cohort 自己的点 id: 单卡 W4A8 点之后还有双卡
+    # qwen35-sweprefix-w4a8-gdnw8a8-ascend-tp2-* (专家 int4 + GDN 五投影
+    # W8A8) 也以 qwen35-sweprefix-w4a8 开头, 只用 w4a8 一层前缀会把它们一起捞进来。
     runs = {
         r["run_id"]: r
         for r in swe_evidence()["runs"]
-        if r.get("point_id", "").startswith("qwen35-sweprefix-w4a8")
+        if r.get("point_id", "").startswith("qwen35-sweprefix-w4a8-ascend-tp1")
     }
     assert len(runs) == len(LEVELS)
     for point in points:
